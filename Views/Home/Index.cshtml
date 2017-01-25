@@ -1,7 +1,18 @@
+@model twinder.Models.Message
+
 @{
     ViewData["Title"] = "Home Page";
 }
-
+<div>
+    <h1>This will be my content</h1>
+    <div>
+        <form asp-controller="Home" asp-action="AddMessage" method="post">
+            <!-- Input and Submit elements -->
+            <input asp-for="Content"/>
+            <button type="submit">Test</button>
+        </form>
+    </div>
+</div>
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>

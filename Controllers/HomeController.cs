@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using twinder.Models;
 
 namespace WebApplication.Controllers
 {
@@ -30,6 +31,11 @@ namespace WebApplication.Controllers
         public IActionResult Error()
         {
             return View();
+        }
+
+        public IActionResult AddMessage(Message model)
+        {
+            return View("Index");
         }
     }
 }
