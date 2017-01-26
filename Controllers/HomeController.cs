@@ -11,6 +11,7 @@ namespace WebApplication.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["messages"] = _messages;
             return View();
         }
 
@@ -35,7 +36,11 @@ namespace WebApplication.Controllers
 
         public IActionResult AddMessage(Message model)
         {
+            _messages.Add(model);
+            ViewData["messages"] = _messages;
             return View("Index");
         }
+
+        private static readonly List<Message> _messages = new List<Message>();
     }
 }
