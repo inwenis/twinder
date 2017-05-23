@@ -1,28 +1,61 @@
 @model twinder.Models.Message
+@section Scripts {
+    <script src="~/lib/angular/angular.js"></script>
+    <script src="~/js/ViewThread.js"></script>
+    <script src="~/js/ViewThreadController.js"></script>
+    <script src="~/js/LoginController.js"></script>
 
-<div>
+}
+
+<div ng-app="ViewThread" ng-controller="ViewThreadController as vm">
     <div class="row">
         <div class="col-md-offset-4 col-md-4">
-            <h1>Twinder</h1>
+            <h1 class="text-center">Twinder</h1>
         </div>
     </div>
-
-    <div>
-        <form asp-controller="Home" asp-action="AddMessage" method="post">
-            <!-- Input and Submit elements -->
-            <input asp-for="Content" />
-            <button type="submit">Test</button>
-        </form>
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4 well">
+            <form class="form-inline" ng-submit="vm.AddMessage()">
+                <div class="form-group" style="width: 100%; padding-bottom: 3px">
+                    <textarea class="form-control" rows="3" ng-model="vm.NewMessage.content" placeholder="Your post goes here..." style="width: 100%"></textarea>
+                </div>
+                <div class="form-group" style="width: 100%">
+                    <button type="submit" class="btn btn-default pull-right" style="width: 20%">Post</button>
+                </div>
+            </form>
+        </div>
     </div>
-    @{
-        var messages = ((List<twinder.Models.Message>)ViewData["messages"]);
-    }
-    @foreach (var message in messages)
-    {
-        <div class="row">
-            <div class="col-md-offset-4 col-md-4">
-                @message.Content
+    <div class="row" ng-repeat="message in vm.Messages">
+        <div class="col-md-offset-4 col-md-4 well">
+            <p>{{ message.content }}</p>
+            <p class="text-right"><em>by {{ message.author }} ({{ message.creationTimeStamp | date:'short'}})</em></p>
+
+            <div class="well" ng-repeat="reply in message.replies" ng-if="$index < 2 || message.showAllReplies">
+                <p class="small">{{ reply.content }}</p>
+                <p class="small text-right"><em>by {{ reply.author }} ({{ reply.creationTimeStamp | date:'short'}})</em></p>
+            </div>
+            <div class="well">
+                <div ng-if="message.replies.length >= 0 && message.replies.length <= 2">
+                    <p ng-if="message.replies.length == 0">there are no replies</p>
+                    <p ng-if="message.replies.length == 1 || message.replies.length == 2">there are no more replies</p>
+                </div>
+                <div ng-if="message.replies.length >= 3 && !message.showAllReplies">
+                    <p ng-if="message.replies.length == 3">there is one more reply</p>
+                    <p ng-if="message.replies.length > 3">there are {{ message.replies.length - 2 }} more replies</p>
+                    <button ng-if="!message.showAllReplies" class="btn" ng-click="vm.ShowAllReplies(message.id)">show</button>
+                </div>
+                <button ng-if="message.replies.length >= 3 && message.showAllReplies" class="btn" ng-click="vm.HideReplies(message.id)">hide</button>
+            </div>
+            <div class="well">
+                <form class="form-inline">
+                    <div class="form-group" style="width: 100%; padding-bottom: 3px">
+                        <textarea class="form-control" style="width: 100%" rows="2" placeholder="Your reply goes here..." ng-model="message.NewReply.content"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" ng-click="vm.Reply(message.id)">Reply</button>
+                    </div>
+                </form>
             </div>
         </div>
-    }
+    </div>
 </div>

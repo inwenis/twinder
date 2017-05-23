@@ -1,0 +1,59 @@
+﻿@model twinder.Models.Message
+@section Scripts {
+    <script src="~/lib/angular/angular.js"></script>
+    <script src="~/js/ViewThread.js"></script>
+    <script src="~/js/ViewThreadController.js"></script>
+}
+<div ng-app="ViewThread" ng-controller="ViewThreadController as vm">
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4">
+            <h1 class="text-center">Twinder</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <table class="table table-responsive table-striped">
+                <tr ng-repeat="message in vm.Messages">
+                    <td>{{ message.content | uppercase }}</td>
+                    <td>{{ message.author }}</td>
+                    <td>{{ message.creationTimeStamp | date:'yyyy' }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <form ng-submit="vm.GetMessages()">
+            <input type="text" id="name" name="name" ng-model="vm.NewMessage.Content"/>
+            <input type="submit"/>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4 well">
+            <p>@Model.Content</p>
+            <p class="text-right"><em>by @Model.Author (@Model.CreationTimeStamp.ToString("d"))</em>
+            </p>
+
+            @foreach (var reply in Model.Replies)
+            {
+                <div class="well">
+                    <p class="small">@reply.Content</p>
+                    <p class="small text-right"><em>by @reply.Author (@reply.CreationTimeStamp.ToString("d"))</em>
+                    </p>
+                </div>
+            }
+
+            <div class="well">
+                <form asp-controller="Home" asp-action="AddReply" method="post" class="form-inline">
+                    <div class="form-group" style="width: 100%; padding-bottom: 3px">
+                        <textarea class="form-control" rows="2" id="Content" name="Content" placeholder="Your reply goes here..." style="width: 100%"></textarea>
+                    </div>
+                    <div class="form-group" style="width: 100%">
+                        <button type="submit" class="btn btn-default pull-right" style="width: 20%">Reply</button>
+                    </div>
+                    <input type="hidden" id="MessageId" name="MessageId" value="@Model.Id" />
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -48,7 +48,8 @@ namespace WebApplication
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
-
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -76,7 +77,7 @@ namespace WebApplication
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -1,0 +1,16 @@
+rename message to post?
+
+add an awesome visualization for adding messages
+test if messages are shown in correct order
+
+---> loging in does not reload page
+
+add real DB
+
+write a reply! <---- does not yet work
+inline buttont to view all replies
+animation and / sound for adding replies
+
+limit number of data sent to client -> dont send gigabytes of data at one 
+
+fix post button in mobile device mode
